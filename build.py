@@ -4,7 +4,7 @@ import json, os
 
 HOME = "https://szszszsz.com"
 CAFE = "https://cafe.naver.com/s2s2s2s2s2s2s2s2"
-BASE = "https://test.szszszsz.com"
+BASE = "https://quiz.szszszsz.com"
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 CSS = r""":root{--bg:#1f1a3a;--card:#fff;--ink:#2a2728;--pink:#e8a0b4;--rose:#c86b7e;--soft:#f8f1f3;--muted:#8a8488;--line:#ece4e7}

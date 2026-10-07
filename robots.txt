@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://test.szszszsz.com/sitemap.xml
+Sitemap: https://quiz.szszszsz.com/sitemap.xml

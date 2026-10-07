@@ -85,7 +85,7 @@ FOOTER = (
     f'<div><p class="ft-brand"><a href="{HOME}/">szszszsz</a></p><p class="ft-tag">연애·궁합·짝사랑·사주·운세·타로까지, 마음 이야기를 무료로 나누는 공간이에요.</p></div>'
     '<div><p class="ft-h">카테고리</p><ul>' + "".join(f'<li><a href="{HOME}/{c}/">{c}</a></li>' for c in CATS) + '</ul></div>'
     f'<div><p class="ft-h">커뮤니티</p><ul><li><a href="{CAFE}"{NEW}>네이버 카페 가입하기</a></li><li><a href="{CAFE}"{NEW}>카페에서 고민 나누기</a></li></ul></div>'
-    '<div><p class="ft-h">안내</p><ul><li><a href="mailto:contact@haeclass.com">문의하기</a></li></ul></div>'
+    f'<div><p class="ft-h">안내</p><ul><li><a href="{HOME}/소개/">szszszsz 소개</a></li><li><a href="{HOME}/개인정보처리방침/">개인정보처리방침</a></li><li><a href="mailto:contact@haeclass.com">문의하기</a></li></ul></div>'
     '</div><hr class="ft-hr">'
     '<p class="ft-biz">이메일: <a href="mailto:contact@haeclass.com">contact@haeclass.com</a></p>'
     '<p class="ft-biz" style="margin:0;line-height:1.7">© 2026 szszszsz. 모든 콘텐츠는 무료예요.<br>재미와 자기 이해를 위한 내용이며, 전문 상담을 대신하지 않아요.</p>'
@@ -174,14 +174,20 @@ def main():
         os.makedirs(os.path.join(HERE, slug), exist_ok=True)
         with open(os.path.join(HERE, slug, "index.html"), "w", encoding="utf-8", newline="\n") as f:
             f.write(page(slug, t))
+    import tarot
+    os.makedirs(os.path.join(HERE, "tarot"), exist_ok=True)
+    with open(os.path.join(HERE, "tarot", "index.html"), "w", encoding="utf-8", newline="\n") as f:
+        f.write(tarot.page(CSS, HEADER, FOOTER, CAFE, HOME, BASE))
     with open(os.path.join(HERE, "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f'<!doctype html><meta charset="utf-8"><title>szszszsz 무료 테스트</title>'
                 f'<meta http-equiv="refresh" content="0; url={HOME}/"><link rel="canonical" href="{HOME}/">'
                 f'<a href="{HOME}/">szszszsz.com으로 이동</a>\n')
     with open(os.path.join(HERE, "sitemap.xml"), "w", encoding="utf-8", newline="\n") as f:
         f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
-        f.writelines(f'  <url><loc>{BASE}/{s}/</loc><lastmod>2026-10-08</lastmod></url>\n' for s in TESTS)
+        f.writelines(f'  <url><loc>{BASE}/{s}/</loc><lastmod>2026-10-08</lastmod></url>\n' for s in list(TESTS) + ["tarot"])
         f.write('</urlset>\n')
+    import share  # 결과 화면 공유 바 (카카오톡·라인·스레드 등)
+    share.apply(HERE, "ko")
     print("만든 테스트:", ", ".join(TESTS))
 
 

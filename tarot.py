@@ -149,14 +149,15 @@ EXTRA_CSS = r"""
 ENGINE = r"""
 const CAFE=CFG.cafe,HOME=CFG.home,C=CFG.cards,TP=CFG.topics;
 const app=document.getElementById('app');let topic=null,card=null;
+const PRE=/[?&]c=\d/.test(location.search);let pre=PRE;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ROMAN=['0','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI'];
 function go(s){history.pushState({s},'');render(s)}
 window.onpopstate=e=>render(e.state?e.state.s:0);
 function render(s){if(s===0||topic===null)return start();if(s===1||card===null)return pick();result();window.scrollTo(0,0)}
 function rnd(n){try{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n}catch(e){return Math.floor(Math.random()*n)}}
-function start(){topic=null;card=null;app.innerHTML=`<div class="fade"><div class="hearts">🔮</div><h1>${esc(CFG.title)}</h1><p class="lead">마음속으로 고민을 하나 떠올리고, 궁금한 주제를 골라 주세요.</p><div class="topics">${TP.map((t,i)=>`<button class="btn opt" data-i="${i}">${esc(t[1])}</button>`).join('')}</div><p class="small">회원가입도, 이메일도 필요 없어요.</p></div>`;
-app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{topic=+b.dataset.i;go(1)})}
+function start(){topic=null;card=null;app.innerHTML=`<div class="fade"><div class="hearts">🔮</div><h1>${esc(CFG.title)}</h1><p class="lead">${pre?'카드를 골랐어요 ✦ 이제 어떤 고민에 대한 카드인지 골라 주세요.':'마음속으로 고민을 하나 떠올리고, 궁금한 주제를 골라 주세요.'}</p><div class="topics">${TP.map((t,i)=>`<button class="btn opt" data-i="${i}">${esc(t[1])}</button>`).join('')}</div><p class="small">회원가입도, 이메일도 필요 없어요.</p></div>`;
+app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{topic=+b.dataset.i;if(pre){pre=false;card=rnd(22);go(2)}else go(1)})}
 function pick(){card=null;const t=TP[topic];app.innerHTML=`<div class="fade"><div class="top"><button class="back" onclick="history.back()">← 이전</button><span class="meta">${esc(t[2])}</span></div><p class="q" style="text-align:center">숨을 한 번 고르고,<br>마음이 가는 카드를 한 장 골라 주세요.</p><div class="deck">${Array.from({length:22},(_,i)=>`<button class="back-card" aria-label="${i+1}번째 카드"></button>`).join('')}</div></div>`;
 app.querySelectorAll('.back-card').forEach(b=>b.onclick=()=>{if(card!==null)return;card=rnd(22);b.classList.add('pick');setTimeout(()=>go(2),450)})}
 function result(){const c=C[card],t=TP[topic],main=c[5+topic];

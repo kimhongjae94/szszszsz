@@ -6,6 +6,30 @@ HOME = "https://szszszsz.com"
 CAFE = "https://cafe.naver.com/s2s2s2s2s2s2s2s2"
 BASE = "https://quiz.szszszsz.com"
 HERE = os.path.dirname(os.path.abspath(__file__))
+IMG = "https://szszszszcom.wordpress.com/wp-content/uploads/2026/10/sz-{}.png?resize=1200,630"
+OG_IMG = {"crush-test": "hero-mind", "attraction-test": "hero-pull", "reply-test": "hero-talk",
+          "love-style-test": "hero-love", "jealousy-test": "hero-envy", "conflict-test": "hero-fight", "tarot": "card-1"}
+
+
+def seo_head(slug, name, desc, url):
+    """공유 미리보기(카카오톡·페이스북 등)와 검색엔진용 구조화 데이터."""
+    img = IMG.format(OG_IMG[slug])
+    ld = {"@context": "https://schema.org", "@type": "WebPage", "name": name, "description": desc, "url": url,
+          "inLanguage": "ko-KR", "image": img, "isAccessibleForFree": True,
+          "isPartOf": {"@type": "WebSite", "name": "szszszsz", "url": HOME + "/"},
+          "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [
+              {"@type": "ListItem", "position": 1, "name": "szszszsz", "item": HOME + "/"},
+              {"@type": "ListItem", "position": 2, "name": name, "item": url}]}}
+    return "\n".join([
+        '<meta property="og:type" content="website">',
+        '<meta property="og:site_name" content="szszszsz">',
+        '<meta property="og:locale" content="ko_KR">',
+        f'<meta property="og:image" content="{img}">',
+        '<meta property="og:image:width" content="1200">',
+        '<meta property="og:image:height" content="630">',
+        '<meta name="twitter:card" content="summary_large_image">',
+        f'<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>'])
+
 
 CSS = r""":root{--bg:#1f1a3a;--card:#fff;--ink:#2a2728;--pink:#e8a0b4;--rose:#c86b7e;--soft:#f8f1f3;--muted:#8a8488;--line:#ece4e7}
 *{box-sizing:border-box}
@@ -146,6 +170,7 @@ def page(slug, t):
 <meta property="og:title" content="{cfg['title']}">
 <meta property="og:description" content="{t['desc']}">
 <meta property="og:url" content="{url}">
+{seo_head(slug, t['seo_title'], t['desc'], url)}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500;600;700&family=Young+Serif&display=swap" rel="stylesheet">
 <style>
@@ -177,7 +202,7 @@ def main():
     import tarot
     os.makedirs(os.path.join(HERE, "tarot"), exist_ok=True)
     with open(os.path.join(HERE, "tarot", "index.html"), "w", encoding="utf-8", newline="\n") as f:
-        f.write(tarot.page(CSS, HEADER, FOOTER, CAFE, HOME, BASE))
+        f.write(tarot.page(CSS, HEADER, FOOTER, CAFE, HOME, BASE, seo_head))
     with open(os.path.join(HERE, "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(f'<!doctype html><meta charset="utf-8"><title>szszszsz 무료 테스트</title>'
                 f'<meta http-equiv="refresh" content="0; url={HOME}/"><link rel="canonical" href="{HOME}/">'

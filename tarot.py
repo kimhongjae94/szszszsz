@@ -177,7 +177,7 @@ CTA_HEAD = "같은 카드를 뽑은 사람들과 이야기해요"
 CTA_TEXT = "szszszsz 네이버 카페에서 오늘 뽑은 카드와 고민을 나눠 보세요. 다른 사람들의 해석과 응원이 생각보다 큰 힘이 돼요."
 
 
-def page(css, header, footer, cafe, home, base):
+def page(css, header, footer, cafe, home, base, seo_head):
     cfg = dict(title=TITLE, topics=TOPICS, cards=CARDS, cafe=cafe, home=home, ctaHead=CTA_HEAD, ctaText=CTA_TEXT)
     url = f"{base}/tarot/"
     return f"""<!doctype html>
@@ -191,6 +191,7 @@ def page(css, header, footer, cafe, home, base):
 <meta property="og:title" content="{TITLE}">
 <meta property="og:description" content="{DESC}">
 <meta property="og:url" content="{url}">
+{seo_head("tarot", "무료 연애 타로 - 오늘의 타로 한 장", DESC, url)}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500;600;700&family=Young+Serif&display=swap" rel="stylesheet">
 <style>

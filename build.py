@@ -194,6 +194,52 @@ const CFG={json.dumps(cfg, ensure_ascii=False)};
 """
 
 
+NAVER_VERIFY = '<meta name="naver-site-verification" content="ae3f82f22de0e5cc1af71d34288a0f4fbc46f3ea" />'
+
+
+def index_page():
+    """quiz.szszszsz.com 첫 화면: 무료 테스트 목록 (네이버 소유확인 태그 포함)."""
+    items = "".join(
+        f'<a class="btn opt" href="{BASE}/{s}/" style="display:block;text-decoration:none">'
+        f'<b>{t["cfg"]["icon"]} {t["cfg"]["title"]}</b><br><span class="small" style="text-align:left;display:block;margin:4px 0 0">{t["desc"]}</span></a>'
+        for s, t in TESTS.items())
+    items += (f'<a class="btn opt" href="{BASE}/tarot/" style="display:block;text-decoration:none">'
+              f'<b>🔮 무료 연애 타로</b><br><span class="small" style="text-align:left;display:block;margin:4px 0 0">카드 한 장으로 보는 지금 그 사람의 마음</span></a>')
+    desc = "연애·썸·짝사랑·이별 무료 심리 테스트와 연애 타로. 회원가입 없이 1분이면 결과를 볼 수 있어요."
+    return f"""<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>무료 연애 심리 테스트 모음 | szszszsz</title>
+<meta name="description" content="{desc}">
+<link rel="canonical" href="{BASE}/">
+{NAVER_VERIFY}
+<meta property="og:title" content="무료 연애 심리 테스트 모음 | szszszsz">
+<meta property="og:description" content="{desc}">
+<meta property="og:url" content="{BASE}/">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500;600;700&family=Young+Serif&display=swap" rel="stylesheet">
+<style>
+{CSS}
+</style>
+</head>
+<body>
+{HEADER}
+<main><div class="wrap">
+  <div class="brand">무료 연애 테스트</div>
+  <div class="card">
+    <h1>무료 연애 심리 테스트</h1>
+    <p class="lead">썸, 짝사랑, 연애, 이별까지. 회원가입 없이 1분이면 결과를 볼 수 있어요.</p>
+    {items}
+  </div>
+</div></main>
+{FOOTER}
+</body>
+</html>
+"""
+
+
 def main():
     for slug, t in TESTS.items():
         os.makedirs(os.path.join(HERE, slug), exist_ok=True)
@@ -204,11 +250,10 @@ def main():
     with open(os.path.join(HERE, "tarot", "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(tarot.page(CSS, HEADER, FOOTER, CAFE, HOME, BASE, seo_head))
     with open(os.path.join(HERE, "index.html"), "w", encoding="utf-8", newline="\n") as f:
-        f.write(f'<!doctype html><meta charset="utf-8"><title>szszszsz 무료 테스트</title>'
-                f'<meta http-equiv="refresh" content="0; url={HOME}/"><link rel="canonical" href="{HOME}/">'
-                f'<a href="{HOME}/">szszszsz.com으로 이동</a>\n')
+        f.write(index_page())
     with open(os.path.join(HERE, "sitemap.xml"), "w", encoding="utf-8", newline="\n") as f:
         f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
+        f.write(f'  <url><loc>{BASE}/</loc><lastmod>2026-10-09</lastmod></url>\n')
         f.writelines(f'  <url><loc>{BASE}/{s}/</loc><lastmod>2026-10-08</lastmod></url>\n' for s in list(TESTS) + ["tarot"])
         f.write('</urlset>\n')
     import share  # 결과 화면 공유 바 (카카오톡·라인·스레드 등)

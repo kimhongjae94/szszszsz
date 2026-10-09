@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://quiz.szszszsz.com/sitemap.xml
+
+#DaumWebMasterTool:54b5b4da0e4a7ff69fa219c2f241bd5175cf2ec3892941e56e4224e294e65533:0hLs22uXuQEdQ5MT1Nx0Pw==

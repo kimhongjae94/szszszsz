@@ -32,7 +32,7 @@ ICONS = [
 ]
 
 JS = r"""(function(){var L=__L__,K=__K__,app=document.getElementById('app');if(!app)return;
-function u(){return location.href.split('?')[0].split('#')[0]}
+function u(){return window.szRes&&window.szRes.url||location.href.split('?')[0].split('#')[0]}
 function t(){var h=document.querySelector('.res h2'),n=document.title.split(' | ')[0].split(' - ')[0];return h?L.msg.replace('{T}',n).replace('{R}',h.textContent.trim()):n}
 function flash(b,m){var s=b.querySelector('span'),o=s.textContent;s.textContent=m;setTimeout(function(){s.textContent=o},2200)}
 function copy(){var v=t()+' '+u();if(navigator.clipboard)return navigator.clipboard.writeText(v).then(function(){return true},function(){return old(v)});return Promise.resolve(old(v))}

@@ -205,7 +205,6 @@ def page(css, header, footer, cafe, home, base, seo_head):
 <main><div class="wrap">
   <div class="brand">SZSZSZSZ · 무료 연애 타로</div>
   <div class="card" id="app"></div>
-  <p class="small" style="color:#9d95b8">재미와 자기 이해를 위한 콘텐츠예요. 고른 내용은 어디에도 저장되지 않아요.</p>
 </div></main>
 {footer}
 <script>

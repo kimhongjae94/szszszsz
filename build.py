@@ -106,13 +106,13 @@ HEADER = (
 
 FOOTER = (
     '<footer class="site-ft"><div class="ft-in"><div class="ft-cols">'
-    f'<div><p class="ft-brand"><a href="{HOME}/">szszszsz</a></p><p class="ft-tag">연애·궁합·짝사랑·사주·운세·타로까지, 마음 이야기를 무료로 나누는 공간이에요.</p></div>'
+    f'<div><p class="ft-brand"><a href="{HOME}/">szszszsz</a></p></div>'
     '<div><p class="ft-h">카테고리</p><ul>' + "".join(f'<li><a href="{HOME}/{c}/">{c}</a></li>' for c in CATS) + '</ul></div>'
     f'<div><p class="ft-h">커뮤니티</p><ul><li><a href="{CAFE}"{NEW}>네이버 카페 가입하기</a></li><li><a href="{CAFE}"{NEW}>카페에서 고민 나누기</a></li></ul></div>'
     f'<div><p class="ft-h">안내</p><ul><li><a href="{HOME}/소개/">szszszsz 소개</a></li><li><a href="{HOME}/개인정보처리방침/">개인정보처리방침</a></li><li><a href="mailto:contact@haeclass.com">문의하기</a></li></ul></div>'
     '</div><hr class="ft-hr">'
     '<p class="ft-biz">이메일: <a href="mailto:contact@haeclass.com">contact@haeclass.com</a></p>'
-    '<p class="ft-biz" style="margin:0;line-height:1.7">© 2026 szszszsz. 모든 콘텐츠는 무료예요.<br>재미와 자기 이해를 위한 내용이며, 전문 상담을 대신하지 않아요.</p>'
+    '<p class="ft-biz" style="margin:0;line-height:1.7">© 2026 szszszsz. 모든 콘텐츠는 무료입니다</p>'
     '</div></footer>'
 )
 
@@ -132,20 +132,28 @@ function render(step){if(step<0)return start();if(step>=Q.length)return result()
 function start(){ans=[];app.innerHTML=`<div class="fade"><div class="hearts">${CFG.icon}</div><h1>${esc(CFG.title)}</h1><p class="lead">${esc(CFG.lead)}</p><button class="btn main" id="go">테스트 시작하기 →</button><p class="small">회원가입도, 이메일도 필요 없어요.</p></div>`;document.getElementById('go').onclick=()=>go(0)}
 function show(i){const [q,opts]=Q[i];app.innerHTML=`<div class="fade"><div class="top">${backBtn}<span class="meta">질문 ${i+1} / ${Q.length}</span></div><div class="bar"><i style="width:${i/Q.length*100}%"></i></div><p class="q">${esc(q)}</p>${opts.map((o,k)=>`<button class="btn opt${ans[i]===k?' on':''}" data-k="${k}">${esc(o[0])}</button>`).join('')}</div>`;
 app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{app.querySelectorAll('.opt').forEach(x=>x.classList.remove('on'));b.classList.add('on');ans[i]=+b.dataset.k;setTimeout(()=>go(i+1),180)})}
-function tail(name){return `<div class="cta"><strong>${esc(CFG.ctaHead)}</strong><p>${esc(CFG.ctaText)}</p><a class="btn main" href="${CAFE}" target="_blank" rel="noopener">네이버 카페 가입하기 →</a><a class="alt" href="${HOME}/">다른 무료 테스트 더 보기 →</a></div>
+function tail(name){return `<button class="btn main" id="img" style="margin-top:18px">📸 결과 이미지 저장하기 (스토리·카톡용)</button><div class="cta"><strong>${esc(CFG.ctaHead)}</strong><p>${esc(CFG.ctaText)}</p><a class="btn main" href="${CAFE}" target="_blank" rel="noopener">네이버 카페 가입하기 →</a><a class="alt" href="${HOME}/">다른 무료 테스트 더 보기 →</a></div>
 <div class="row"><button class="btn ghost" id="sh">결과 공유하기</button><button class="btn ghost" id="re">다시 하기</button></div>`}
 function bind(name){document.getElementById('re').onclick=()=>{ans=[];go(0)};
-document.getElementById('sh').onclick=async()=>{const txt=CFG.share.replace('{R}',name),url=location.href.split('?')[0].split('#')[0];
+const RU=window.szRes.url;
+document.getElementById('img').onclick=async()=>{const src=RU+'story.png';
+try{const b=await(await fetch(src)).blob();const f=new File([b],'result.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:CFG.title});return}}catch(e){}
+const a=document.createElement('a');a.href=src;a.download='톡할까말까-결과.png';document.body.appendChild(a);a.click();a.remove()};
+document.getElementById('sh').onclick=async()=>{const txt=CFG.share.replace('{R}',name),url=RU;
 try{if(navigator.share){await navigator.share({title:CFG.title,text:txt,url});return}await navigator.clipboard.writeText(txt+' '+url);document.getElementById('sh').textContent='링크가 복사됐어요 ✓'}catch(e){}}}
+// 결과별 공유 페이지 (친구가 열면 내 결과 카드가 미리보기로 보임)
+function setRes(id){window.szRes={id:String(id),url:location.href.split('?')[0].split('#')[0].replace(/[^/]*$/,'')+'r/'+id+'/'}}
 function result(){if(ans.filter(x=>x!==undefined).length<Q.length)return start();
 if(CFG.mode==='score'){
 const sc=ans.reduce((s,k,n)=>s+Q[n][1][k][1],0),max=Q.length*3,pct=Math.round(sc/max*100),r=CFG.results.find(x=>sc>=x.min);
+setRes(CFG.results.indexOf(r));
 app.innerHTML=`<div class="fade res"><div class="top">${backBtn}<span class="tag">${esc(CFG.tag)}</span></div><div class="hearts">${r.h}</div><h2>${esc(r.t)}</h2><div class="meter"><i style="width:${pct}%"></i></div><div class="pct">${esc(CFG.meter)}: ${pct}%</div><p style="margin-top:14px">${esc(r.s)}</p><div class="tips"><b>${esc(CFG.tipsLabel)}</b><ul style="margin:0;padding-left:18px">${r.tips.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div>${tail(r.t)}</div>`;
 return bind(r.t)}
 const T=CFG.types,ORDER=Object.keys(T).join('');
 const c={};Object.keys(T).forEach(k=>c[k]=0);ans.forEach((k,n)=>c[Q[n][1][k][1]]++);
 const last=Q[Q.length-1][1][ans[Q.length-1]][1];
 const top=Object.keys(c).sort((a,b)=>c[b]-c[a]||(b===last)-(a===last)||ORDER.indexOf(a)-ORDER.indexOf(b))[0],r=T[top];
+setRes(top);
 const mix=Object.keys(c).sort((a,b)=>c[b]-c[a]||(a===top?-1:b===top?1:0)).map(k=>`<div class="r${k===top?' top':''}"><span>${esc(T[k].short)}</span><span class="t"><i style="width:${Math.round(c[k]/Q.length*100)}%"></i></span><span>${Math.round(c[k]/Q.length*100)}%</span></div>`).join('');
 app.innerHTML=`<div class="fade res"><div class="top">${backBtn}<span class="tag">${esc(CFG.tag)}</span></div><div class="hearts">${r.e}</div><h2>${esc(r.name)}</h2><p>${esc(r.s)}</p><div class="mix">${mix}</div>
 <div class="two"><div><b>${esc(CFG.labels[0])}</b>${esc(r.str)}</div><div><b>${esc(CFG.labels[1])}</b>${esc(r.watch)}</div></div><div class="tips"><b>${esc(CFG.labels[2])}</b>${esc(r.tip)}</div><p class="small" style="margin-top:0">${esc(r.saju)}</p>${tail(r.name)}</div>`;
@@ -182,7 +190,6 @@ def page(slug, t):
 <main><div class="wrap">
   <div class="brand">{t['brand']}</div>
   <div class="card" id="app"></div>
-  <p class="small" style="color:#9d95b8">{t['note']}</p>
 </div></main>
 {FOOTER}
 <script>
@@ -256,6 +263,8 @@ def main():
         f.write(f'  <url><loc>{BASE}/</loc><lastmod>2026-10-09</lastmod></url>\n')
         f.writelines(f'  <url><loc>{BASE}/{s}/</loc><lastmod>2026-10-08</lastmod></url>\n' for s in list(TESTS) + ["tarot"])
         f.write('</urlset>\n')
+    import cards  # 결과별 공유 카드 이미지 + 공유 페이지
+    print("결과 카드:", cards.build(BASE, TESTS), "장")
     import share  # 결과 화면 공유 바 (카카오톡·라인·스레드 등)
     share.apply(HERE, "ko")
     print("만든 테스트:", ", ".join(TESTS))

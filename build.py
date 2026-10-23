@@ -3,12 +3,12 @@
 import json, os
 
 HOME = "https://szszszsz.com"
-CAFE = "https://cafe.naver.com/s2s2s2s2s2s2s2s2"
+CAFE = "https://cafe.naver.com/2starcafe"  # 2026-10-23: 이혼정보카페 이정카로 통일
 BASE = "https://quiz.szszszsz.com"
 HERE = os.path.dirname(os.path.abspath(__file__))
 IMG = "https://szszszszcom.wordpress.com/wp-content/uploads/2026/10/sz-{}.png?resize=1200,630"
 OG_IMG = {"crush-test": "hero-mind", "attraction-test": "hero-pull", "reply-test": "hero-talk",
-          "love-style-test": "hero-love", "jealousy-test": "hero-envy", "conflict-test": "hero-fight", "tarot": "card-1"}
+          "love-style-test": "hero-love", "jealousy-test": "hero-envy", "conflict-test": "hero-fight", "divorce-rate-test": "hero-fight", "tarot": "card-1"}
 
 
 def seo_head(slug, name, desc, url):
@@ -92,22 +92,22 @@ h1{font:400 30px/1.25 "Young Serif",serif;margin:6px 0 10px;text-align:center}
 .fade{animation:f .25s ease}@keyframes f{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
 @media(max-width:420px){.two{grid-template-columns:1fr}.mix .r{grid-template-columns:104px 1fr 34px}}"""
 
-CATS = ["연애", "궁합", "짝사랑", "사주", "운세", "타로"]
+CATS = [("이혼 절차", "category/divorce-process"), ("재산분할·위자료", "category/property-alimony"), ("양육권·양육비", "category/custody-child-support"), ("부부갈등", "category/marital-conflict"), ("외도·불륜", "category/affair"), ("이혼 재판", "category/divorce-trial")]
 NEW = ' target="_blank" rel="noopener"'
 
 HEADER = (
     f'<header class="site-hd"><a class="site-logo" href="{HOME}/">szszszsz</a>'
     '<button class="site-menu" aria-label="메뉴" onclick="document.querySelector(\'.site-nav\').classList.toggle(\'open\')">'
     '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>'
-    '<nav class="site-nav">' + "".join(f'<a href="{HOME}/{c}/">{c}</a>' for c in CATS)
+    '<nav class="site-nav">' + "".join(f'<a href="{HOME}/{u}/">{c}</a>' for c, u in CATS)
     + f'<a href="{CAFE}"{NEW}>커뮤니티</a></nav>'
-    f'<div class="site-act"><a class="site-cafe" href="{CAFE}"{NEW}>네이버 카페 가입하기</a></div></header>'
+    f'<div class="site-act"><a class="site-cafe" href="{CAFE}"{NEW}>이혼정보카페 가입하기</a></div></header>'
 )
 
 FOOTER = (
     '<footer class="site-ft"><div class="ft-in"><div class="ft-cols">'
     f'<div><p class="ft-brand"><a href="{HOME}/">szszszsz</a></p></div>'
-    '<div><p class="ft-h">카테고리</p><ul>' + "".join(f'<li><a href="{HOME}/{c}/">{c}</a></li>' for c in CATS) + '</ul></div>'
+    '<div><p class="ft-h">카테고리</p><ul>' + "".join(f'<li><a href="{HOME}/{u}/">{c}</a></li>' for c, u in CATS) + '</ul></div>'
     f'<div><p class="ft-h">커뮤니티</p><ul><li><a href="{CAFE}"{NEW}>네이버 카페 가입하기</a></li><li><a href="{CAFE}"{NEW}>카페에서 고민 나누기</a></li></ul></div>'
     f'<div><p class="ft-h">안내</p><ul><li><a href="{HOME}/소개/">szszszsz 소개</a></li><li><a href="{HOME}/개인정보처리방침/">개인정보처리방침</a></li><li><a href="mailto:contact@haeclass.com">문의하기</a></li></ul></div>'
     '</div><hr class="ft-hr">'
@@ -118,7 +118,7 @@ FOOTER = (
 
 # 결과 화면 끝: 네이버 카페 안내 (모든 테스트 공통)
 CTA_HEAD = "혼자 고민하지 말고, 함께 이야기해요"
-CTA_TEXT = "비슷한 결과를 받은 사람들이 szszszsz 네이버 카페에서 이야기를 나누고 있어요. 내 이야기를 털어놓고 다른 사람들의 생각도 들어 보세요."
+CTA_TEXT = "비슷한 결과를 받은 사람들이 네이버 카페 이정카(대한민국 이혼정보카페)에서 이야기를 나누고 있어요. 익명 닉네임으로 내 이야기를 털어놓고 다른 사람들의 생각도 들어 보세요."
 
 # 공통 화면 흐름: -1 시작, 0~(문항수-1) 질문, 문항수 결과. 휴대폰 뒤로가기도 이전 질문으로
 ENGINE = r"""

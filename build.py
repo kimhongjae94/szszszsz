@@ -96,7 +96,7 @@ CATS = [("이혼 절차", "category/divorce-process"), ("재산분할·위자료
 NEW = ' target="_blank" rel="noopener"'
 
 HEADER = (
-    f'<header class="site-hd"><a class="site-logo" href="{HOME}/">szszszsz</a>'
+    f'<header class="site-hd"><a class="site-logo" href="{HOME}/">이혼정보카페</a>'
     '<button class="site-menu" aria-label="메뉴" onclick="document.querySelector(\'.site-nav\').classList.toggle(\'open\')">'
     '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>'
     '<nav class="site-nav">' + "".join(f'<a href="{HOME}/{u}/">{c}</a>' for c, u in CATS)
@@ -106,7 +106,7 @@ HEADER = (
 
 FOOTER = (
     '<footer class="site-ft"><div class="ft-in"><div class="ft-cols">'
-    f'<div><p class="ft-brand"><a href="{HOME}/">szszszsz</a></p></div>'
+    f'<div><p class="ft-brand"><a href="{HOME}/">이혼정보카페</a></p></div>'
     '<div><p class="ft-h">카테고리</p><ul>' + "".join(f'<li><a href="{HOME}/{u}/">{c}</a></li>' for c, u in CATS) + '</ul></div>'
     f'<div><p class="ft-h">커뮤니티</p><ul><li><a href="{CAFE}"{NEW}>네이버 카페 가입하기</a></li><li><a href="{CAFE}"{NEW}>카페에서 고민 나누기</a></li></ul></div>'
     f'<div><p class="ft-h">안내</p><ul><li><a href="{HOME}/소개/">szszszsz 소개</a></li><li><a href="{HOME}/개인정보처리방침/">개인정보처리방침</a></li><li><a href="mailto:contact@haeclass.com">문의하기</a></li></ul></div>'
@@ -138,7 +138,7 @@ function bind(name){document.getElementById('re').onclick=()=>{ans=[];go(0)};
 const RU=window.szRes.url;
 document.getElementById('img').onclick=async()=>{const src=RU+'story.png';
 try{const b=await(await fetch(src)).blob();const f=new File([b],'result.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:CFG.title});return}}catch(e){}
-const a=document.createElement('a');a.href=src;a.download='톡할까말까-결과.png';document.body.appendChild(a);a.click();a.remove()};
+const a=document.createElement('a');a.href=src;a.download='이혼정보카페-결과.png';document.body.appendChild(a);a.click();a.remove()};
 document.getElementById('sh').onclick=async()=>{const txt=CFG.share.replace('{R}',name),url=RU;
 try{if(navigator.share){await navigator.share({title:CFG.title,text:txt,url});return}await navigator.clipboard.writeText(txt+' '+url);document.getElementById('sh').textContent='링크가 복사됐어요 ✓'}catch(e){}}}
 // 결과별 공유 페이지 (친구가 열면 내 결과 카드가 미리보기로 보임)

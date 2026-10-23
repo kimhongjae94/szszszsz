@@ -84,7 +84,7 @@ def card(w, h, test_title, name, line, hearts):
         d.text(((w - tw) / 2, y), text, font=font, fill=fill)
 
     y = int((150 if big else 50) * s)
-    center("szszszsz · 무료 이혼 테스트" if "이혼" in test_title else "톡할까 말까 · 무료 연애 테스트", f_brand, y, (232, 160, 180))
+    center("이혼정보카페 · 무료 테스트", f_brand, y, (232, 160, 180))
     y += int((110 if big else 70) * s)
     for ln in wrap(d, test_title, f_test, inner):
         center(ln, f_test, y, (230, 222, 240))
